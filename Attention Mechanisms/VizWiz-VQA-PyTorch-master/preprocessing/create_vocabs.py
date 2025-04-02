@@ -50,7 +50,7 @@ def main():
 
     if args.path_config is not None:
         with open(args.path_config, 'r') as handle:
-            config = yaml.load(handle)
+            config = yaml.load(handle, Loader=yaml.FullLoader)
 
     pprint(config)
 

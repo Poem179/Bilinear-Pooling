@@ -50,7 +50,7 @@ def main():
 
     if args.path_config is not None:
         with open(args.path_config, 'r') as handle:
-            config = yaml.load(handle)
+            config = yaml.load(handle, Loader=yaml.FullLoader)
             config = config['images']
 
     # Benchmark mode is good whenever your input sizes for your network do not vary
@@ -72,7 +72,7 @@ def main():
 
     h5_file = h5py.File(config['path_features'], 'w')
 
-    dummy_input = Variable(torch.ones(1, 3, config['img_size'], config['img_size']), volatile=True).cuda()
+    dummy_input = Variable(torch.ones(1, 3, config['img_size'], config['img_size'])).cuda()
     _, dummy_output = net(dummy_input)
 
     att_features_shape = (
@@ -102,7 +102,7 @@ def main():
     delta = config['preprocess_batch_size']
 
     for i, inputs in enumerate(tqdm(data_loader)):
-        inputs_img = Variable(inputs['visual'].cuda(async=True), volatile=True)
+        inputs_img = Variable(inputs['visual'].cuda(non_blocking=True))
         no_att_feat, att_feat = net(inputs_img)
 
         # reshape (batch_size, 2048)

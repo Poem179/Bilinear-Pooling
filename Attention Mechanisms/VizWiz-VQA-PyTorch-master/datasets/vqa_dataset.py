@@ -109,7 +109,8 @@ class VQADataset(data.Dataset):
         if self.split != 'test':
             item['answer'] = self.answers[i]
         img_name = self.img_names[i]
-        feature_id = self.name_to_id[img_name]
+        feature_id = self.name_to_id[img_name.decode('utf-8')]
+        img_name = img_name.encode()
         item['img_name'] = self.img_names[i]
         item['visual'] = self.features[feature_id]
         # collate_fn sorts the samples in order to be possible to pack them later in the model.

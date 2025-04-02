@@ -29,10 +29,10 @@ def train(model, loader, optimizer, tracker, epoch, split):
         a = item['answer']
         q_length = item['q_length']
 
-        v = Variable(v.cuda(async=True))
-        q = Variable(q.cuda(async=True))
-        a = Variable(a.cuda(async=True))
-        q_length = Variable(q_length.cuda(async=True))
+        v = Variable(v.cuda(non_blocking=True))
+        q = Variable(q.cuda(non_blocking=True))
+        a = Variable(a.cuda(non_blocking=True))
+        q_length = Variable(q_length.cuda(non_blocking=True))
 
         out = model(v, q, q_length)
 
@@ -74,10 +74,10 @@ def evaluate(model, loader, tracker, epoch, split):
             sample_id = item['sample_id']
             q_length = item['q_length']
 
-            v = Variable(v.cuda(async=True))
-            q = Variable(q.cuda(async=True))
-            a = Variable(a.cuda(async=True))
-            q_length = Variable(q_length.cuda(async=True))
+            v = Variable(v.cuda(non_blocking=True))
+            q = Variable(q.cuda(non_blocking=True))
+            a = Variable(a.cuda(non_blocking=True))
+            q_length = Variable(q_length.cuda(non_blocking=True))
 
             out = model(v, q, q_length)
 
@@ -125,7 +125,7 @@ def main():
 
     if args.path_config is not None:
         with open(args.path_config, 'r') as handle:
-            config = yaml.load(handle)
+            config = yaml.load(handle, Loader=yaml.FullLoader)
 
     # generate log directory
     dir_name = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
